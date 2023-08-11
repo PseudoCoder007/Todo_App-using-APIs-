@@ -2,21 +2,36 @@ let tasks = [];
 const tasksList = document.getElementById('list');
 const addTaskInput = document.getElementById('add');
 const tasksCounter = document.getElementById('tasks-counter');
+var a=1;
 //6.9.11
-function fetchTodos(){//GET request
-    fetch('https://jsonplaceholder.typicode.com/todos')
-    .then(function(response){
-        // console.log(response);
-        return response.json();
-    }).then(function(data){
-        // console.log(data);
+// function fetchTodos(){//GET request
+    // fetch('https://jsonplaceholder.typicode.com/todos')
+    // .then(function(response){
+    //     // console.log(response);
+    //     return response.json();
+    // }).then(function(data){
+    //     // console.log(data);
+    //     tasks=data.slice(0,10);
+    //     renderList();
+    // })
+    // .catch(function(error){
+    //     console.log('error',error);
+    // });
+// }
+
+//6.9.12 Async awaits-:we wrap whole code in try-catch block
+async function fetchTodos(){
+    try{
+        const response=await fetch('https://jsonplaceholder.typicode.com/todos');
+        const data=await response.json();
         tasks=data.slice(0,10);
         renderList();
-    })
-    .catch(function(error){
-        console.log('error',error);
-    });
+    } 
+    catch(error){
+        console.log(error);
+    }
 }
+
 
 function addTaskTODom(task){//1.create 'li' 2.adding HTML to 'li' ,and 3.appending li to ul list.
     // 1.

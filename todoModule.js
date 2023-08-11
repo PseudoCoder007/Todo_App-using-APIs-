@@ -1,16 +1,28 @@
-let tasks = [];
+var todoListApp=(function(){let tasks = [];
 const tasksList = document.getElementById('list');
 const addTaskInput = document.getElementById('add');
 const tasksCounter = document.getElementById('tasks-counter');
+var a=10;
+async function fetchTodos(){
+    try{
+        const response=await fetch('https://jsonplaceholder.typicode.com/todos');
+        const data=await response.json();
+        tasks=data.slice(0,10);
+        renderList();
+    } 
+    catch(error){
+        console.log(error);
+    }
+}
 
-console.log('Working');
+
 function addTaskTODom(task){//1.create 'li' 2.adding HTML to 'li' ,and 3.appending li to ul list.
     // 1.
     const li=document.createElement('li');
     // 2.
     li.innerHTML=`
-    <input type="checkbox" id="${task.id}" ${task.done? 'checked' : ''} class="custom-checkbox">
-    <label for="${task.id}">${task.text}</label>
+    <input type="checkbox" id="${task.id}" ${task.completed? 'checked' : ''} class="custom-checkbox">
+    <label for="${task.id}">${task.title}</label>
     <img src="bin.svg" class="delete" data-id="${task.id}">
     `
     //3.
@@ -26,13 +38,13 @@ function renderList () {//  1. empty the 'ul' list  2.loop over the tasks[] and,
 }
 
 // function markTaskAsComplete (taskId) {} Or
-function toggleTask (taskId) {// get the task with taskid and toggle done flag
+function toggleTask (taskId) {// get the task with taskid and toggle completed flag
     const task=tasks.filter(function(task){
         return task.id==taskId;
     })
     if(task.length>0){
         const currentTask=task[0];
-        currentTask.done=!currentTask.done;
+        currentTask.completed=!currentTask.completed;
         renderList();
         showNotification('Task is toggled successfully!');
         return;
@@ -42,7 +54,7 @@ function toggleTask (taskId) {// get the task with taskid and toggle done flag
 
 function deleteTask (taskId) {
     const newTasks=tasks.filter(function(task){
-       return task.id!==taskId;
+       return task.id!==Number(taskId);
     })
     tasks=newTasks;
     renderList();
@@ -73,19 +85,16 @@ function handleInputKeypress(e){
         showNotification('Task text cannot be empty!');
     }
     const task={
-        text,
+        title:text,
         id:Date.now().toString(),
-        done:false
+        completed:false
     }
     e.target.value='';
     addTask(task);
 }
 }
-//Now we need to hook the event listener for checking the item as well as for deleting it.
-// we can do it by using Event Delegation,i.e. attaching event listener to the whole doc. and perform operation -:
 function handleClickListener(e){
     const target=e.target;
-    // console.log(target);
     if(target.className=='delete'){
         const taskId=target.dataset.id;
         deleteTask(taskId);
@@ -100,8 +109,13 @@ function handleClickListener(e){
 }
 
 function initializeApp(){
+fetchTodos();
 addTaskInput.addEventListener('keyup',handleInputKeypress);
 document.addEventListener('click',handleClickListener);
 }
 
-initializeApp();
+return{
+    initialize:initializeApp,
+    a:a
+}
+})();

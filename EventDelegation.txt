@@ -1,0 +1,9 @@
+Event Delegation-:
+
+Which of the following statements is/are true about event delegation in javascript?
+1. Event Delegation is basically a pattern to handle events efficiently.
+2. Event Delegation means adding an event listener to each and every similar element.
+3. It simplifies initialization, saves memory and improves performance.
+4. By using event delegation, we can add an event listener to a parent element and call an event on a particular target using the . target property of the event object.
+
+//Sol-1,3,4
