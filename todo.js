@@ -1,11 +1,29 @@
 let tasks = [];
-const taskList = document.getElementById('list');
+const tasksList = document.getElementById('list');
 const addTaskInput = document.getElementById('add');
 const tasksCounter = document.getElementById('tasks-counter');
 
 console.log('Working');
+function addTaskTODom(task){//1.create 'li' 2.adding HTML to 'li' ,and 3.appending li to ul list.
+    // 1.
+    const li=document.createElement('li');
+    // 2.
+    li.innerHTML=`
+    <input type="checkbox" id="${task.id}" ${task.done?checked:''} class="custom-checkbox">
+    <label for="${task.id}">${task.text}</label>
+    <img src="bin.svg" class="delete data-id="${task.id}">
+    `
+    //3.
+    tasksList.append(li);
+}
 
-function renderList () {}
+function renderList () {// 1. empty the 'ul' list  2.loop over the tasks[] and,  3.call the addTaskTODom() for each task
+    tasksList.innerHTML='';
+    for(let i=0;i<tasks.length;i++){
+        addTaskTODom(tasks[i]);
+    }
+    tasksCounter.innerHTML=tasks.length;
+}
 
 // function markTaskAsComplete (taskId) {} Or
 function toggleTask (taskId) {// get the task with taskid and toggle done flag
